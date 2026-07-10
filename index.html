@@ -4,41 +4,136 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="21600">
-<title>Flora · Reykjavik</title>
+<title>Flora · Helsinki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
+    background: #0e0e0c;
+    font-family: 'DM Serif Display', Georgia, serif;
+    color: #1a1a16;
     overflow: hidden;
-    background: #111110;
-    font-family: 'Cormorant Garamond', Georgia, serif;
   }
 
-  .layout {
+  .page {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 100vh;
   }
 
-  /* تصویر — سمت چپ */
+  /* ===== TOP BAR ===== */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2.5rem;
+    height: 52px;
+    background: #0e0e0c;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #5a9a6a;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(90,154,106,0.4); }
+    50%       { opacity: 0.6; box-shadow: 0 0 0 4px rgba(90,154,106,0); }
+  }
+
+  .brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .clock {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .topbar-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+  }
+
+  /* ===== IMAGE ZONE ===== */
   .image-zone {
     flex: 1;
     position: relative;
     overflow: hidden;
-    background: #1a1a15;
+    background: #1a1a14;
   }
 
   .image-zone img {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
+    animation: slowZoom 30s ease-in-out infinite alternate;
+    display: block;
+  }
+
+  @keyframes slowZoom {
+    from { transform: scale(1.0); }
+    to   { transform: scale(1.06); }
+  }
+
+  /* gradient overlay bottom */
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(14,14,12,0.3) 70%,
+      rgba(14,14,12,0.85) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* floating location badge on image */
+  .image-badge {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: rgba(14,14,12,0.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.4rem 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    animation: fadeInDown 1s ease forwards;
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .image-loading {
@@ -49,240 +144,293 @@
     justify-content: center;
     flex-direction: column;
     gap: 1rem;
-    background: #1a1a15;
-    z-index: 2;
+    background: #1a1a14;
+    z-index: 3;
   }
 
-  .spinner {
-    width: 32px; height: 32px;
-    border: 1.5px solid #333;
-    border-top-color: #5a7a5a;
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
+  .leaf-anim {
+    opacity: 0.25;
+    animation: leafFloat 3s ease-in-out infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes leafFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-8px) rotate(5deg); }
+  }
 
-  .spinner-text {
-    font-size: 0.6rem;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.15em;
-    color: #444;
+  .loading-txt {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.2);
     text-transform: uppercase;
   }
 
-  /* پنل اطلاعات — سمت راست، عرض ثابت */
-  .info-panel {
-    width: 380px;
-    min-width: 380px;
-    background: #f0ebe0;
+  /* ===== BOTTOM INFO BAR ===== */
+  .bottom-bar {
+    background: #f4ede0;
+    flex-shrink: 0;
+    border-top: 2px solid #2d5a3d;
+  }
+
+  /* shimmer top border */
+  .bottom-bar::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, #2d5a3d 0%, #8aab7a 40%, #c8a96e 70%, #2d5a3d 100%);
+    background-size: 300% 100%;
+    animation: shimmer 6s linear infinite;
+    margin-top: -2px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1.6fr 1px 1fr;
+    height: 140px;
+  }
+
+  .divider-v {
+    background: #d8d0c0;
+    margin: 1rem 0;
+  }
+
+  /* weather block */
+  .weather-block {
+    padding: 1.2rem 2rem;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #c8c0b0;
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  .info-panel::before {
-    content: '';
-    position: absolute;
-    top: 20px; right: 20px;
-    width: 16px; height: 16px;
-    border-top: 1.5px solid #1a1a18;
-    border-right: 1.5px solid #1a1a18;
-  }
-  .info-panel::after {
-    content: '';
-    position: absolute;
-    bottom: 20px; left: 20px;
-    width: 16px; height: 16px;
-    border-bottom: 1.5px solid #1a1a18;
-    border-left: 1.5px solid #1a1a18;
-  }
-
-  .panel-header {
-    padding: 2rem 2rem 1.5rem;
-    border-bottom: 1px solid #c8c0b0;
-    display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    flex-shrink: 0;
   }
 
-  .panel-title {
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
+  .block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.48rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
-    color: #8a8478;
+    color: #9a9080;
+    margin-bottom: 0.8rem;
   }
 
-  .panel-date {
-    font-size: 0.58rem;
-    font-family: 'Space Mono', monospace;
-    color: #8a8478;
-  }
-
-  .weather-grid {
-    padding: 1.2rem 2rem;
-    border-bottom: 1px solid #c8c0b0;
+  .weather-items {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    background: rgba(255,255,255,0.5);
-    flex-shrink: 0;
+    gap: 0.6rem 1rem;
   }
 
-  .weather-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .w-item { display: flex; flex-direction: column; gap: 0.1rem; }
 
-  .weather-label {
-    font-size: 0.5rem;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.14em;
+  .w-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.42rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #8a8478;
+    color: #b0a898;
   }
 
-  .weather-value {
-    font-size: 1rem;
+  .w-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
     font-weight: 300;
     color: #1a1a18;
+    font-variant-numeric: tabular-nums;
   }
 
-  .plant-section {
-    padding: 2rem 2rem;
-    flex: 1;
+  /* plant block — center */
+  .plant-block {
+    padding: 1.2rem 2.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    gap: 0.3rem;
   }
 
   .plant-latin {
-    font-size: 2.2rem;
+    font-size: 1.75rem;
     font-style: italic;
-    font-weight: 300;
-    line-height: 1.15;
+    font-weight: 400;
+    line-height: 1.1;
     color: #1a1a18;
-    margin-bottom: 0.4rem;
+    animation: slideUp 0.7s ease forwards;
   }
 
   .plant-common {
-    font-size: 0.58rem;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.18em;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #2d5a3d;
-    margin-bottom: 1.8rem;
-  }
-
-  .divider {
-    width: 32px;
-    height: 1px;
-    background: #c8c0b0;
-    margin-bottom: 1.8rem;
-    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+    animation: slideUp 0.85s ease forwards;
   }
 
   .plant-note {
-    font-size: 1.05rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: #3a3830;
+    font-size: 0.82rem;
     font-style: italic;
-    margin-bottom: 1.8rem;
+    line-height: 1.5;
+    color: #4a4840;
+    animation: slideUp 1s ease forwards;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* fact block */
+  .fact-block {
+    padding: 1.2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .fact-text {
+    font-size: 0.8rem;
+    font-style: italic;
+    line-height: 1.55;
+    color: #5a5248;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .fact-text::before {
+    content: '"';
+    font-size: 2rem;
+    line-height: 1;
+    color: #c8b898;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
+    font-style: normal;
+    align-self: flex-start;
+    margin-top: -0.2rem;
+  }
+
+  .phenology-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .phenology-tag {
-    display: inline-block;
-    font-size: 0.52rem;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.14em;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.45rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #2d5a3d;
-    border: 1px solid #2d5a3d;
-    padding: 0.3rem 0.8rem;
-    width: fit-content;
+    border: 1px solid rgba(45,90,61,0.35);
+    padding: 0.25rem 0.7rem;
+    background: rgba(45,90,61,0.05);
   }
 
-  .panel-footer {
-    padding: 1.2rem 2rem;
-    border-top: 1px solid #c8c0b0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .location-text {
-    font-size: 0.55rem;
-    font-family: 'Space Mono', monospace;
+  .updated-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.42rem;
     letter-spacing: 0.1em;
-    color: #8a8478;
-  }
-
-  .updated-text {
-    font-size: 0.5rem;
-    font-family: 'Space Mono', monospace;
-    color: #c8c0b0;
+    color: #b8b0a0;
   }
 </style>
 </head>
 <body>
-<div class="layout">
+<div class="page">
 
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="live-dot"></div>
+      <span class="brand">Flora · Today</span>
+    </div>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="topbar-right">10 Jul 2026</div>
+  </div>
+
+  <!-- IMAGE -->
   <div class="image-zone">
     <div class="image-loading" id="loader">
-      <div class="spinner"></div>
-      <span class="spinner-text">Painting the plant</span>
+      <svg class="leaf-anim" width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="#5a9a6a" stroke-width="1.2">
+        <path d="M26 46 C26 46 26 20 26 15 C26 5 37 1 44 7 C44 7 33 13 30 24"/>
+        <path d="M26 32 C26 32 19 24 11 24 C3 24 2 32 8 37 C14 42 26 37 26 32"/>
+        <line x1="26" y1="46" x2="26" y2="39"/>
+      </svg>
+      <span class="loading-txt">Painting the season</span>
     </div>
     <img
-      src="https://image.pollinations.ai/prompt/Detailed%20botanical%20illustration%20of%20Angelica%20archangelica%2C%20japanese%20woodblock%20ukiyo-e%20style%2C%20fine%20ink%20lines%2C%20muted%20earth%20tones%2C%20aged%20cream%20paper%20background%2C%20full%20plant%20with%20roots%20leaves%20and%20flowers%2C%20no%20text%2C%20no%20labels?width=1920&height=1080&seed=12332&nologo=true&enhance=true"
-      alt="Garden Angelica"
+      src="https://image.pollinations.ai/prompt/Beautiful%20botanical%20illustration%20of%20Dandelion%2C%20japanese%20woodblock%20ukiyo-e%20style%2C%20delicate%20ink%20lines%2C%20soft%20muted%20earth%20tones%2C%20aged%20cream%20paper%2C%20detailed%20flowers%20and%20leaves%2C%20elegant%20composition%2C%20no%20text%2C%20no%20labels%2C%20masterpiece%20quality?width=1200&height=800&seed=54338&nologo=true"
+      alt="Dandelion"
       onload="document.getElementById('loader').style.display='none'"
       onerror="document.getElementById('loader').style.display='none'"
     />
+    <div class="image-overlay"></div>
+    <div class="image-badge">Helsinki · Finland</div>
   </div>
 
-  <div class="info-panel">
-    <div class="panel-header">
-      <span class="panel-title">Flora · Today</span>
-      <span class="panel-date">10 July 2026</span>
-    </div>
+  <!-- BOTTOM INFO -->
+  <div class="bottom-bar">
+    <div class="info-grid">
 
-    <div class="weather-grid">
-      <div class="weather-item">
-        <span class="weather-label">Temperature</span>
-        <span class="weather-value">10°C</span>
+      <!-- WEATHER -->
+      <div class="weather-block">
+        <div class="block-label">Conditions</div>
+        <div class="weather-items">
+          <div class="w-item">
+            <span class="w-label">Temp</span>
+            <span class="w-value">20°C</span>
+          </div>
+          <div class="w-item">
+            <span class="w-label">Humidity</span>
+            <span class="w-value">71%</span>
+          </div>
+          <div class="w-item">
+            <span class="w-label">Sky</span>
+            <span class="w-value" style="font-size:0.72rem">Partly cloudy</span>
+          </div>
+          <div class="w-item">
+            <span class="w-label">Season</span>
+            <span class="w-value" style="font-size:0.72rem">Summer</span>
+          </div>
+        </div>
       </div>
-      <div class="weather-item">
-        <span class="weather-label">Humidity</span>
-        <span class="weather-value">83%</span>
-      </div>
-      <div class="weather-item">
-        <span class="weather-label">Condition</span>
-        <span class="weather-value">Partly cloudy</span>
-      </div>
-      <div class="weather-item">
-        <span class="weather-label">Season</span>
-        <span class="weather-value">Summer</span>
-      </div>
-    </div>
 
-    <div class="plant-section">
-      <div class="plant-latin">Angelica archangelica</div>
-      <div class="plant-common">GARDEN ANGELICA</div>
-      <div class="divider"></div>
-      <div class="plant-note">Unfurling umbels in misty air</div>
-      <div class="phenology-tag">Flowering</div>
-    </div>
+      <div class="divider-v"></div>
 
-    <div class="panel-footer">
-      <span class="location-text">Reykjavik, Iceland</span>
-      <span class="updated-text">updated 11:26</span>
+      <!-- PLANT -->
+      <div class="plant-block">
+        <div class="plant-latin">Taraxacum officinale</div>
+        <div class="plant-common">DANDELION</div>
+        <div class="plant-note">Blooming wildly in Helsinki</div>
+      </div>
+
+      <div class="divider-v"></div>
+
+      <!-- FACT -->
+      <div class="fact-block">
+        <div class="block-label">Did you know</div>
+        <div class="fact-text">Produces latex to heal wounds</div>
+        <div class="phenology-row">
+          <div class="phenology-tag">Flowering</div>
+          <span class="updated-tag">updated 11:41</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
 </div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = h + ':' + m + ':' + s;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
 </body>
 </html>
