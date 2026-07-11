@@ -6,8 +6,8 @@ import os
 from datetime import datetime
 from urllib.parse import quote
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "YOUR_GROQ_API_KEY")
-UPDATE_HOURS = 6
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+UPDATE_HOURS = 2
 
 CITIES = [
     {"name": "Tokyo", "lat": 35.68, "lon": 139.69, "country": "Japan"},
